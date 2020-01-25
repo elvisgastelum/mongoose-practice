@@ -1,14 +1,18 @@
-const moongose = require('mongoose');
-const db = moongose.connection;
+require('./connection');
 
-const URI = 'mongodb://localhost:27017/mongoose-practice';
-const config = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-};
+const Product = require('./models/Product');
 
-moongose.connect(URI, config);
+async function saveProduct() {
+    const laptop = new Product({
+        name: 'laptop',
+        description: 'this is a simple description of a normal laptop',
+        price: 1399.99
+    });
 
-db.once('open', _ => {
-    console.log(`database is connected to ${URI}`)
-})
+    const documentSaved = await laptop.save();
+    console.log(documentSaved);
+}
+
+saveProduct()
+    .catch(e => console.log(e))
+    .then(console.log('Document saved'));
